@@ -1,20 +1,32 @@
 import React from "react";
-import products from "../products";
-import { Row, Col } from "react-bootstrap";
-import Product from "./Product";
+import { Card } from "react-bootstrap";
+import Rating from "./Rating";
 
-const ProductList = () => {
+const Product = ({ product }) => {
   return (
-    <Row>
-      {products.map((product) => {
-        return (
-          <Col key={product._id} lg="4" sx="3" md="6" sm="12">
-            <Product product={product} />
-          </Col>
-        );
-      })}
-    </Row>
+    <Card className="my-3 rounded p-3">
+      <a href={`/product/${product._id}`}>
+        <Card.Img src={product.image} alt={product.name} />
+      </a>
+      <Card.Body>
+        <a href={`/product/${product._id}`}>
+          <Card.Title as="div">
+            <strong>{product.name}</strong>
+          </Card.Title>
+        </a>
+
+        <Card.Text as="div">
+          <div className="my-3">
+            <Rating
+              reviews={` ${product.numReviews} reviews`}
+              rating={product.rating}
+            />
+          </div>
+        </Card.Text>
+        <Card.Text as="h3">${product.price}</Card.Text>
+      </Card.Body>
+    </Card>
   );
 };
 
-export default ProductList;
+export default Product;

@@ -1,19 +1,19 @@
 import React from "react";
-import { Container } from "react-bootstrap";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { Container, Row, Col } from "react-bootstrap";
 import ProductList from "../components/ProductList";
 
 const HomeScreen = () => {
   return (
     <>
-      <Header />
-      <main className="py-3">
-        <Container>
-          <ProductList />
-        </Container>
-      </main>
-      <Footer />
+      <Row>
+        {products.map((product) => {
+          return (
+            <Col key={product._id} lg="4" sx="3" md="6" sm="12">
+              <ProductList product={product} />
+            </Col>
+          );
+        })}
+      </Row>
     </>
   );
 };
