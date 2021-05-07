@@ -1,9 +1,11 @@
 const express = require("express");
 const products = require("./data/products.js");
 const dotenv = require("dotenv");
-
+const connectDB = require("./config/db");
 dotenv.config();
 const app = express();
+
+connectDB();
 app.get("/", (req, res) => {
   res.json("hlo");
 });
