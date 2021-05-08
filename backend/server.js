@@ -1,19 +1,18 @@
 const express = require("express");
-const products = require("./data/products.js");
+const productRoutes = require("./routes/productRoutes");
 const dotenv = require("dotenv");
+const cors = require("cors");
 const connectDB = require("./config/db");
-dotenv.config();
 const app = express();
-
+dotenv.config();
 connectDB();
-app.get("/", (req, res) => {
-  res.json("hlo");
-});
-app.get("/products", (req, res) => {
-  res.json(products);
-});
-app.get("/products/:id", (req, res) => {
-  const product = products.find((p) => p._id === req.params.id);
-  res.json(product);
-});
+app.use(cors());
+
+app.use("/api/products", productRoutes);
+
+const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+
+app.use(notFound);
+app.use(errorHandler);
+
 app.listen(5000, console.log("Running on port 5000"));
