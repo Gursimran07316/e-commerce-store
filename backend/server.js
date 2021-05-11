@@ -1,5 +1,6 @@
 const express = require("express");
 const productRoutes = require("./routes/productRoutes");
+const userRoutes = require("./routes/userRoutes");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
@@ -7,8 +8,12 @@ const app = express();
 dotenv.config();
 connectDB();
 app.use(cors());
-
+app.use(express.json());
+app.get("/", (req, res) => {
+  res.send("api is running");
+});
 app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
