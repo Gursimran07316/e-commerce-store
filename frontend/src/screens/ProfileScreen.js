@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserDetails } from "../actions/userActions";
+import { getUserDetails, updateUserDetails } from "../actions/userActions";
 import Message from "../components/Message";
 import Loading from "../components/Loading";
 import { Row, Col } from "react-bootstrap";
+import { USER_DETAILS_UPDATE_RESET } from "../constants/userConstants";
 
 const ProfileScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -17,16 +18,19 @@ const ProfileScreen = ({ history }) => {
   const { loading, user } = userLogin;
   const userDetails = useSelector((state) => state.userDetails);
   const { userInfo, error } = userDetails;
+  const updatedUser = useSelector((state) => state.updateUser);
+  const { success } = updatedUser;
   useEffect(() => {
     if (!user) {
       history.push("/signin");
-    } else if (!userInfo) {
+    } else if (!userInfo || !userInfo.name || success) {
+      dispatch({ type: USER_DETAILS_UPDATE_RESET });
       dispatch(getUserDetails());
     } else {
       setName(userInfo.name);
       setEmail(userInfo.email);
     }
-  }, [dispatch, user, history, userInfo]);
+  }, [dispatch, user, history, userInfo, success]);
   const submitHandler = (e) => {
     e.preventDefault();
 
@@ -34,7 +38,7 @@ const ProfileScreen = ({ history }) => {
     if (password2 !== password) {
       setMessage("Passwords do not match ");
     } else {
-      //   dispatch update profile
+      dispatch(updateUserDetails({ name, email, password }));
     }
   };
   return (
@@ -44,6 +48,9 @@ const ProfileScreen = ({ history }) => {
         <Form onSubmit={submitHandler}>
           {error && <Message variant="danger">{error}</Message>}
           {message && <Message variant="danger">{message}</Message>}
+          {success && (
+            <Message variant="success">Profile is successfuly updated</Message>
+          )}
           {loading && <Loading />}
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
