@@ -15,6 +15,7 @@ const LoginScreen = ({ history, location }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { error, loading, user } = userLogin;
   const redirect = location.search ? location.search.split("=")[1] : "/";
+  console.log(redirect);
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(loginUser(email, password));
@@ -30,7 +31,7 @@ const LoginScreen = ({ history, location }) => {
       <Form onSubmit={submitHandler}>
         {error && <Message variant="danger">{error}</Message>}
         {loading && <Loading />}
-        <Form.Group controlId="formBasicEmail">
+        <Form.Group controlId="email">
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type="email"
@@ -40,7 +41,7 @@ const LoginScreen = ({ history, location }) => {
           />
         </Form.Group>
 
-        <Form.Group controlId="formBasicPassword">
+        <Form.Group controlId="password">
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"

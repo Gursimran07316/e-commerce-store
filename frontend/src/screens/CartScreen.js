@@ -22,7 +22,7 @@ const CartScreen = ({ history }) => {
     dispatch(removeItem(id));
   };
   const checkoutHandler = () => {
-    history.push("/login?redirect=shipping");
+    history.push("/signin?redirect=shipping");
   };
   return (
     <Row>
