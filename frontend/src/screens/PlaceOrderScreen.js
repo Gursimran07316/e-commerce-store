@@ -56,6 +56,7 @@ const PlaceOrderScreen = ({ history }) => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h3> Shipping</h3>
+
               <p>
                 Shipping address: {shippingAddress.address}{" "}
                 {shippingAddress.city} {shippingAddress.country}
