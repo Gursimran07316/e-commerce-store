@@ -3,9 +3,10 @@ const {
   createOrder,
   getOrderById,
   updateOrderToPaid,
+  getMyOrders,
 } = require("../controllers/orderControllers");
 const { protect } = require("../middleware/authMiddleware");
-router.route("/").post(protect, createOrder);
+router.route("/").post(protect, createOrder).get(protect, getMyOrders);
 router.route("/:id").get(protect, getOrderById);
 router.route("/:id/pay").get(protect, updateOrderToPaid);
 module.exports = router;

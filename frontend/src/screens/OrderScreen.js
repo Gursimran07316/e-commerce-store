@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, ListGroup, Image, Button, Card } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Message from "../components/Message";
@@ -8,6 +8,7 @@ import { getOrderById, payOrder } from "../actions/orderActions";
 import { PayPalButton } from "react-paypal-button-v2";
 import Loading from "../components/Loading";
 import { ORDER_PAY_RESET } from "../constants/orderContants";
+import axios from "axios";
 
 const OrderScreen = ({ history, match }) => {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const OrderScreen = ({ history, match }) => {
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     );
   }
+
   useEffect(() => {
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get("/api/config/paypal");
@@ -52,7 +54,7 @@ const OrderScreen = ({ history, match }) => {
 
   const successPaymentHandler = (paymentResult) => {
     console.log(paymentResult);
-    dispatch(payOrder(orderId, paymentResult));
+    dispatch(payOrder(id, paymentResult));
   };
 
   return (
@@ -163,9 +165,9 @@ const OrderScreen = ({ history, match }) => {
 
                 {!order.isPaid && (
                   <ListGroup.Item>
-                    {loadingPay && <Loader />}
+                    {loadingPay && <Loading />}
                     {!sdkReady ? (
-                      <Loader />
+                      <Loading />
                     ) : (
                       <PayPalButton
                         amount={order.totalPrice}

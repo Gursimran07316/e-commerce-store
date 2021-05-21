@@ -12,6 +12,12 @@ import {
   USER_DETAILS_UPDATE_REQUEST,
   USER_DETAILS_UPDATE_SUCCESS,
   USER_DETAILS_UPDATE_FAIL,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAIL,
+  USER_DETAILS_ADMIN_REQUEST,
+  USER_DETAILS_ADMIN_SUCCESS,
+  USER_DETAILS_ADMIN_FAIL,
 } from "../constants/userConstants";
 import axios from "axios";
 
@@ -116,6 +122,54 @@ export const updateUserDetails = (userInfo) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_DETAILS_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const getUserList = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_LIST_REQUEST });
+    const {
+      userLogin: { user },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const { data } = await axios.get("/api/users/admin", config);
+    dispatch({ type: USER_LIST_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const getUserById = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_DETAILS_ADMIN_REQUEST });
+    const {
+      userLogin: { user },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/users/${id}`, config);
+    dispatch({ type: USER_DETAILS_ADMIN_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_DETAILS_ADMIN_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
