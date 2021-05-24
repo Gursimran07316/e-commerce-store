@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import FormContainer from "../components/FormContainer";
 import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser, getUserById } from "../actions/userActions";
+import { getUserById, updateUser } from "../actions/userActions";
 import { Link } from "react-router-dom";
 import Message from "../components/Message";
 import Loading from "../components/Loading";
-import { Row, Col } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
 
-const UserEditScreen = ({ history, match }) => {
+const UserEditScreen = ({ match }) => {
   const dispatch = useDispatch();
   const { id } = match.params;
   const [name, setName] = useState("");
@@ -18,17 +16,20 @@ const UserEditScreen = ({ history, match }) => {
 
   const userDetailsAdmin = useSelector((state) => state.userDetailsAdmin);
   const { error, loading, userInfo } = userDetailsAdmin;
+  const userEditAdmin = useSelector((state) => state.userEditAdmin);
+  const { success, error: errorEdit, loading: loadingEdit } = userEditAdmin;
   useEffect(() => {
-    if (!userInfo || userInfo._id != id) {
+    if (!userInfo || userInfo._id !== id || success) {
       dispatch(getUserById(id));
     } else {
       setName(userInfo.name);
       setEmail(userInfo.email);
       setAdmin(userInfo.isAdmin);
     }
-  }, [dispatch, userInfo, history]);
+  }, [dispatch, userInfo, success, id]);
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(updateUser({ name, email, isAdmin: admin, _id: userInfo._id }));
   };
 
   return (
@@ -62,6 +63,7 @@ const UserEditScreen = ({ history, match }) => {
                 placeholder="Enter email"
               />
             </Form.Group>
+
             <Form.Group controlId="isadmin">
               <Form.Check
                 type="checkbox"
@@ -69,6 +71,8 @@ const UserEditScreen = ({ history, match }) => {
                 checked={admin}
                 onChange={(e) => setAdmin(e.target.checked)}
               ></Form.Check>
+              {loadingEdit && <Loading />}
+              {errorEdit && <Message variant="danger">{errorEdit}</Message>}
             </Form.Group>
             <Button variant="primary" type="submit">
               Update

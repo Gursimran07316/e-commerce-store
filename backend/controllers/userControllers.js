@@ -129,7 +129,7 @@ const getUserById = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/:id
 // @access  Private/adminn
 const editUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.body._id);
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;

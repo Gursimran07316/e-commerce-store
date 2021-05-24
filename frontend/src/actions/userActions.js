@@ -18,6 +18,9 @@ import {
   USER_DETAILS_ADMIN_REQUEST,
   USER_DETAILS_ADMIN_SUCCESS,
   USER_DETAILS_ADMIN_FAIL,
+  USER_EDIT_ADMIN_REQUEST,
+  USER_EDIT_ADMIN_SUCCESS,
+  USER_EDIT_ADMIN_FAIL,
 } from "../constants/userConstants";
 import axios from "axios";
 
@@ -102,33 +105,7 @@ export const getUserDetails = () => async (dispatch, getState) => {
     });
   }
 };
-export const updateUserDetails = (userInfo) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: USER_DETAILS_UPDATE_REQUEST });
-    const {
-      userLogin: { user },
-    } = getState();
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
 
-    const { data } = await axios.put("/api/users/profile", userInfo, config);
-    dispatch({ type: USER_DETAILS_UPDATE_SUCCESS, payload: data });
-    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
-    localStorage.setItem("user", JSON.stringify(data));
-  } catch (error) {
-    dispatch({
-      type: USER_DETAILS_UPDATE_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
 export const getUserList = () => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_LIST_REQUEST });
@@ -170,6 +147,58 @@ export const getUserById = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_DETAILS_ADMIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const updateUserDetails = (userInfo) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_DETAILS_UPDATE_REQUEST });
+    const {
+      userLogin: { user },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const { data } = await axios.put("/api/users/profile", userInfo, config);
+    dispatch({ type: USER_DETAILS_UPDATE_SUCCESS, payload: data });
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+    localStorage.setItem("user", JSON.stringify(data));
+  } catch (error) {
+    dispatch({
+      type: USER_DETAILS_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const updateUser = (userInfo) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_EDIT_ADMIN_REQUEST });
+    const {
+      userLogin: { user },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/users/edit`, userInfo, config);
+    dispatch({ type: USER_EDIT_ADMIN_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_EDIT_ADMIN_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
