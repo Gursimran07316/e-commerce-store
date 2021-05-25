@@ -21,6 +21,9 @@ import {
   USER_EDIT_ADMIN_REQUEST,
   USER_EDIT_ADMIN_SUCCESS,
   USER_EDIT_ADMIN_FAIL,
+  USER_DELETE_ADMIN_REQUEST,
+  USER_DELETE_ADMIN_SUCCESS,
+  USER_DELETE_ADMIN_FAIL,
 } from "../constants/userConstants";
 import axios from "axios";
 
@@ -199,6 +202,30 @@ export const updateUser = (userInfo) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_EDIT_ADMIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const deleteUser = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_DELETE_ADMIN_REQUEST });
+    const {
+      userLogin: { user },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    await axios.delete(`/api/users/${id}`, config);
+    dispatch({ type: USER_DELETE_ADMIN_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: USER_DELETE_ADMIN_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

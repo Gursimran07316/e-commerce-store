@@ -6,8 +6,9 @@ import { getUserById, updateUser } from "../actions/userActions";
 import { Link } from "react-router-dom";
 import Message from "../components/Message";
 import Loading from "../components/Loading";
+import { USER_EDIT_ADMIN_RESET } from "../constants/userConstants";
 
-const UserEditScreen = ({ match }) => {
+const UserEditScreen = ({ match, history }) => {
   const dispatch = useDispatch();
   const { id } = match.params;
   const [name, setName] = useState("");
@@ -19,14 +20,19 @@ const UserEditScreen = ({ match }) => {
   const userEditAdmin = useSelector((state) => state.userEditAdmin);
   const { success, error: errorEdit, loading: loadingEdit } = userEditAdmin;
   useEffect(() => {
-    if (!userInfo || userInfo._id !== id || success) {
-      dispatch(getUserById(id));
+    if (success) {
+      dispatch({ type: USER_EDIT_ADMIN_RESET });
+      history.push("/admin/users");
     } else {
-      setName(userInfo.name);
-      setEmail(userInfo.email);
-      setAdmin(userInfo.isAdmin);
+      if (!userInfo.name || userInfo._id !== id) {
+        dispatch(getUserById(id));
+      } else {
+        setName(userInfo.name);
+        setEmail(userInfo.email);
+        setAdmin(userInfo.isAdmin);
+      }
     }
-  }, [dispatch, userInfo, success, id]);
+  }, [dispatch, userInfo, success, id, history]);
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(updateUser({ name, email, isAdmin: admin, _id: userInfo._id }));

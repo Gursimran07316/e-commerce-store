@@ -12,6 +12,9 @@ import {
   ORDER_GET_MY_REQUEST,
   ORDER_GET_MY_SUCCESS,
   ORDER_GET_MY_FAIL,
+  ORDER_GET_REQUEST,
+  ORDER_GET_SUCCESS,
+  ORDER_GET_FAIL,
 } from "../constants/orderContants";
 
 export const createOrderReducer = (state = {}, action) => {
@@ -73,6 +76,21 @@ export const getMyOrdersReducer = (
     case ORDER_GET_MY_SUCCESS:
       return { loading: false, orders: action.payload };
     case ORDER_GET_MY_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+export const getOrdersReducer = (
+  state = { loading: true, orders: [] },
+  action
+) => {
+  switch (action.type) {
+    case ORDER_GET_REQUEST:
+      return { loading: true };
+    case ORDER_GET_SUCCESS:
+      return { loading: false, orders: action.payload };
+    case ORDER_GET_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

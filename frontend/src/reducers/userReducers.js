@@ -22,6 +22,10 @@ import {
   USER_EDIT_ADMIN_REQUEST,
   USER_EDIT_ADMIN_SUCCESS,
   USER_EDIT_ADMIN_FAIL,
+  USER_DELETE_ADMIN_REQUEST,
+  USER_DELETE_ADMIN_SUCCESS,
+  USER_DELETE_ADMIN_FAIL,
+  USER_EDIT_ADMIN_RESET,
 } from "../constants/userConstants";
 
 export const userLoginReducer = (state = { user: null }, action) => {
@@ -106,8 +110,23 @@ export const userEditAdminReducer = (state = {}, action) => {
       return { loading: true, ...state };
     case USER_EDIT_ADMIN_SUCCESS:
       return { loading: false, success: true };
+    case USER_EDIT_ADMIN_RESET:
+      return {};
     case USER_EDIT_ADMIN_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+export const userDeleteReducer = (state = { success: false }, action) => {
+  switch (action.type) {
+    case USER_DELETE_ADMIN_REQUEST:
+      return { loading: true, ...state };
+    case USER_DELETE_ADMIN_SUCCESS:
+      return { loading: false, success: true };
+    case USER_DELETE_ADMIN_FAIL:
+      return { loading: false, error: action.payload };
+
     default:
       return state;
   }

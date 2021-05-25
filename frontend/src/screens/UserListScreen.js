@@ -1,26 +1,38 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserList } from "../actions/userActions";
+import { getUserList, deleteUser } from "../actions/userActions";
 import Message from "../components/Message";
 import Loading from "../components/Loading";
 import { Table, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
-const UserListScreen = () => {
+const UserListScreen = ({ history }) => {
   const dispatch = useDispatch();
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
+  const userDelete = useSelector((state) => state.userDelete);
+  const {
+    success: successDelete,
+    error: errorDelete,
+    loading: loadingDelete,
+  } = userDelete;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { user: userInfo } = userLogin;
   useEffect(() => {
-    if (!users || users.length === 0) {
+    if (userInfo && userInfo.isAdmin) {
       dispatch(getUserList());
+    } else {
+      history.push("/login");
     }
-  }, [dispatch, users]);
+  }, [dispatch, userInfo, successDelete, history]);
   const removeUserHandler = (id) => {
-    console.log(id);
+    dispatch(deleteUser(id));
   };
   return (
     <>
-      {loading ? (
+      {errorDelete && <Message variant="danger">{errorDelete}</Message>}
+
+      {loading || loadingDelete ? (
         <Loading />
       ) : error ? (
         <Message variant="danger">{error}</Message>
@@ -42,7 +54,10 @@ const UserListScreen = () => {
                   <tr key={user._id}>
                     <td>{user._id}</td>
                     <td>{user.name}</td>
-                    <a href={`mailto:${user.email}`}>{user.email}</a>
+                    <td>
+                      {" "}
+                      <a href={`mailto:${user.email}`}>{user.email}</a>
+                    </td>
 
                     <td>
                       {user.isAdmin ? (

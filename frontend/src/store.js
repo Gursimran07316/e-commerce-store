@@ -14,12 +14,14 @@ import {
   userListReducer,
   userDetailsAdminReducer,
   userEditAdminReducer,
+  userDeleteReducer,
 } from "./reducers/userReducers";
 import {
   createOrderReducer,
   getOrderReducer,
   orderPayReducer,
   getMyOrdersReducer,
+  getOrdersReducer,
 } from "./reducers/orderReducers";
 const reducer = combineReducers({
   productList: productListReducer,
@@ -33,9 +35,10 @@ const reducer = combineReducers({
   orderPay: orderPayReducer,
   getOrder: getOrderReducer,
   getMyOrders: getMyOrdersReducer,
-
+  getOrders: getOrdersReducer,
   userList: userListReducer,
   userDetailsAdmin: userDetailsAdminReducer,
+  userDelete: userDeleteReducer,
   userEditAdmin: userEditAdminReducer,
 });
 
