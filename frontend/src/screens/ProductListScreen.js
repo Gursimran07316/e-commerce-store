@@ -4,7 +4,12 @@ import Message from "../components/Message";
 import Loading from "../components/Loading";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { listProducts } from "../actions/productActions";
+import {
+  listProducts,
+  productDelete,
+  createProduct,
+} from "../actions/productActions";
+import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
 
 const ProductListScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -12,19 +17,39 @@ const ProductListScreen = ({ history }) => {
   const { products, loading, error } = productlist;
   const userLogin = useSelector((state) => state.userLogin);
   const { user } = userLogin;
+  const deleteProduct = useSelector((state) => state.deleteProduct);
+  const {
+    loading: loadingDelete,
+    success: successDelete,
+    error: errorDelete,
+  } = deleteProduct;
+  const productCreate = useSelector((state) => state.productCreate);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    product: createdProduct,
+  } = productCreate;
 
   useEffect(() => {
-    if (user && user.isAdmin) {
-      dispatch(listProducts());
-    } else {
+    dispatch({ type: PRODUCT_CREATE_RESET });
+    if (!user.isAdmin) {
       history.push("/login");
     }
-  }, [user, history, dispatch]);
+    if (successCreate) {
+      history.push(`/admin/products/${createdProduct._id}/edit`);
+    } else {
+      dispatch(listProducts());
+    }
+  }, [user, history, dispatch, successDelete, createdProduct, successCreate]);
   const removeProductHandler = (id) => {
-    //   dispatchDelete product
-    console.log(id);
+    if (window.confirm("Are you sure")) {
+      dispatch(productDelete(id));
+    }
   };
-  const createProductHandler = () => {};
+  const createProductHandler = () => {
+    dispatch(createProduct());
+  };
   return (
     <>
       <Row className="align-items-center">
@@ -37,6 +62,10 @@ const ProductListScreen = ({ history }) => {
           </Button>
         </Col>
       </Row>
+      {loadingDelete && <Loading />}
+      {errorDelete && <Message variant="danger">{errorDelete}</Message>}
+      {loadingCreate && <Loading />}
+      {errorCreate && <Message variant="danger">{errorCreate}</Message>}
       {loading ? (
         <Loading />
       ) : error ? (
@@ -66,7 +95,7 @@ const ProductListScreen = ({ history }) => {
                     <td>{product.brand}</td>
                     <td>
                       <LinkContainer
-                        to={`/product/${product._id}/edit`}
+                        to={`/admin/products/${product._id}/edit`}
                         className="ml-2"
                       >
                         <Button variant="light" className="btn-sm">

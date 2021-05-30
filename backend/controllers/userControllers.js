@@ -146,7 +146,7 @@ const editUser = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
-// @desc    update user details by admin
+// @desc    Delete user by admin
 // @route   DELETE /api/users/:id
 // @access  Private/admin
 const deleteUser = asyncHandler(async (req, res) => {
