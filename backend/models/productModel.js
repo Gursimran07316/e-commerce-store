@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const reviewSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
-    comment: { type: String, required: true },
     rating: { type: Number, required: true },
+    comment: { type: String, required: true },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -12,21 +12,18 @@ const reviewSchema = mongoose.Schema(
     },
   },
   {
-    timeStamps: true,
+    timestamps: true,
   }
 );
+
 const productSchema = mongoose.Schema(
   {
     user: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "User",
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "User",
     },
     name: {
-      type: String,
-      required: true,
-    },
-    description: {
       type: String,
       required: true,
     },
@@ -42,16 +39,11 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    price: {
-      type: Number,
+    description: {
+      type: String,
       required: true,
-      default: 0,
     },
-    countInStock: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
+    reviews: [reviewSchema],
     rating: {
       type: Number,
       required: true,
@@ -62,12 +54,22 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    reviews: [reviewSchema],
+    price: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    countInStock: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
   {
-    timeStamps: true,
+    timestamps: true,
   }
 );
 
 const Product = mongoose.model("Product", productSchema);
+
 module.exports = Product;

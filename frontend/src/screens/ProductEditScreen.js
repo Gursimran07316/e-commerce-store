@@ -45,7 +45,8 @@ const ProductEditScreen = ({ match, history }) => {
         setImage(product.image);
         setBrand(product.brand);
         setCategory(product.category);
-        setCountInStock(product.countInSock);
+        setCountInStock(product.countInStock);
+        console.log(countInStock, product.countInSock);
         setDescription(product.description);
       }
     }
