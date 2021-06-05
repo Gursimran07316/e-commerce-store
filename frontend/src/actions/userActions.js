@@ -24,7 +24,10 @@ import {
   USER_DELETE_ADMIN_REQUEST,
   USER_DELETE_ADMIN_SUCCESS,
   USER_DELETE_ADMIN_FAIL,
+  USER_LIST_RESET,
+  USER_DETAILS_RESET,
 } from "../constants/userConstants";
+import { ORDER_GET_MY_RESET } from "../constants/orderContants";
 import axios from "axios";
 
 export const loginUser = (email, password) => async (dispatch, getState) => {
@@ -54,7 +57,14 @@ export const loginUser = (email, password) => async (dispatch, getState) => {
 };
 export const logout = () => (dispatch) => {
   localStorage.removeItem("user");
+  localStorage.removeItem("cartItems");
+  localStorage.removeItem("shippingAddress");
+  localStorage.removeItem("paymentMethod");
+  dispatch({ type: USER_LIST_RESET });
+  dispatch({ type: USER_DETAILS_RESET });
+  dispatch({ type: ORDER_GET_MY_RESET });
   dispatch({ type: USER_LOGOUT });
+  document.location.href = "/signin";
 };
 export const registerUser = (name, email, password) => async (dispatch) => {
   try {

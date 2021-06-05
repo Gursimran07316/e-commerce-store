@@ -22,7 +22,7 @@ const UserListScreen = ({ history }) => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(getUserList());
     } else {
-      history.push("/login");
+      history.push("/signin");
     }
   }, [dispatch, userInfo, successDelete, history]);
   const removeUserHandler = (id) => {

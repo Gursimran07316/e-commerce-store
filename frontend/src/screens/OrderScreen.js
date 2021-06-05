@@ -13,7 +13,7 @@ import {
 } from "../constants/orderContants";
 import axios from "axios";
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match, history }) => {
   const dispatch = useDispatch();
   const { id } = match.params;
 
@@ -36,6 +36,9 @@ const OrderScreen = ({ match }) => {
   }
 
   useEffect(() => {
+    if (!user) {
+      history.push("/signin");
+    }
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get("/api/config/paypal");
       const script = document.createElement("script");

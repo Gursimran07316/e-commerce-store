@@ -78,8 +78,8 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
     throw new Error("Order not found");
     return;
   } else {
-    order.paid = true;
-    order.paidAt = new Date.now();
+    order.isPaid = true;
+    order.paidAt = Date.now();
     order.paymentResult = {
       id: req.body.id,
       status: req.body.status,

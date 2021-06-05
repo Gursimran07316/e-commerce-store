@@ -19,6 +19,7 @@ import {
   ORDER_DELIVER_SUCCESS,
   ORDER_DELIVER_REQUEST,
   ORDER_DELIVER_RESET,
+  ORDER_GET_MY_RESET,
 } from "../constants/orderContants";
 
 export const createOrderReducer = (state = {}, action) => {
@@ -81,6 +82,8 @@ export const getMyOrdersReducer = (
       return { loading: false, orders: action.payload };
     case ORDER_GET_MY_FAIL:
       return { loading: false, error: action.payload };
+    case ORDER_GET_MY_RESET:
+      return {};
     default:
       return state;
   }

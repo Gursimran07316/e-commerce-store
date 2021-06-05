@@ -103,13 +103,13 @@ export const payOrder = (orderId, paymentResult) => async (
     });
 
     const {
-      userLogin: { userInfo },
+      userLogin: { user },
     } = getState();
 
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
 
@@ -164,12 +164,12 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
     });
 
     const {
-      userLogin: { userInfo },
+      userLogin: { user },
     } = getState();
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
 

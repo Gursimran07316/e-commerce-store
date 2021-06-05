@@ -18,7 +18,7 @@ const OrderListScreen = ({ history }) => {
     if (user && user.isAdmin) {
       dispatch(listOrders());
     } else {
-      history.push("/login");
+      history.push("/signin");
     }
   }, [dispatch, history, user]);
   return (
