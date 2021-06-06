@@ -109,12 +109,16 @@ export const getUserDetails = () => async (dispatch, getState) => {
     const { data } = await axios.get("/api/users/profile", config);
     dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: USER_DETAILS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };
@@ -134,12 +138,16 @@ export const getUserList = () => async (dispatch, getState) => {
     const { data } = await axios.get("/api/users/admin", config);
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: USER_LIST_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };
@@ -158,12 +166,16 @@ export const getUserById = (id) => async (dispatch, getState) => {
     const { data } = await axios.get(`/api/users/${id}`, config);
     dispatch({ type: USER_DETAILS_ADMIN_SUCCESS, payload: data });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: USER_DETAILS_ADMIN_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };
@@ -185,12 +197,16 @@ export const updateUserDetails = (userInfo) => async (dispatch, getState) => {
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
     localStorage.setItem("user", JSON.stringify(data));
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: USER_DETAILS_UPDATE_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };
@@ -210,12 +226,16 @@ export const updateUser = (userInfo) => async (dispatch, getState) => {
     const { data } = await axios.put(`/api/users/edit`, userInfo, config);
     dispatch({ type: USER_EDIT_ADMIN_SUCCESS, payload: data });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: USER_EDIT_ADMIN_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };
@@ -234,12 +254,16 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     await axios.delete(`/api/users/${id}`, config);
     dispatch({ type: USER_DELETE_ADMIN_SUCCESS });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: USER_DELETE_ADMIN_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };

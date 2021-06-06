@@ -25,7 +25,7 @@ const ProfileScreen = ({ history }) => {
   const getMyOrders = useSelector((state) => state.getMyOrders);
   const { orders, loading: loadingOrders, error: errorOrders } = getMyOrders;
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.name) {
       history.push("/signin");
     } else if (!userInfo || !userInfo.name || success || !orders) {
       dispatch({ type: USER_DETAILS_UPDATE_RESET });

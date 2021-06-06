@@ -19,6 +19,7 @@ import {
   ORDER_DELIVER_REQUEST,
 } from "../constants/orderContants";
 import axios from "axios";
+import { logout } from "./userActions";
 export const placeOrder = (order) => async (dispatch, getState) => {
   try {
     dispatch({ type: ORDER_CREATE_REQUEST });
@@ -35,12 +36,16 @@ export const placeOrder = (order) => async (dispatch, getState) => {
     const { data } = await axios.post("/api/orders", order, config);
     dispatch({ type: ORDER_CREATE_SUCCESS, payload: data });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: ORDER_CREATE_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };
@@ -60,12 +65,16 @@ export const getOrderById = (id) => async (dispatch, getState) => {
     const { data } = await axios.get(`/api/orders/${id}`, config);
     dispatch({ type: ORDER_DETAILS_SUCCESS, payload: data });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: ORDER_DETAILS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };
@@ -84,12 +93,16 @@ export const myOrders = () => async (dispatch, getState) => {
     const { data } = await axios.get(`/api/orders`, config);
     dispatch({ type: ORDER_GET_MY_SUCCESS, payload: data });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: ORDER_GET_MY_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };
@@ -124,12 +137,16 @@ export const payOrder = (orderId, paymentResult) => async (
       payload: data,
     });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: ORDER_PAY_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };
@@ -148,12 +165,16 @@ export const listOrders = () => async (dispatch, getState) => {
     const { data } = await axios.get(`/api/orders/all`, config);
     dispatch({ type: ORDER_GET_SUCCESS, payload: data });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: ORDER_GET_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: message,
     });
   }
 };
@@ -184,12 +205,16 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
+    }
     dispatch({
       type: ORDER_DELIVER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: messaage,
     });
   }
 };
