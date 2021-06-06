@@ -214,7 +214,7 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
     }
     dispatch({
       type: ORDER_DELIVER_FAIL,
-      payload: messaage,
+      payload: message,
     });
   }
 };
